@@ -17,7 +17,7 @@ const Home = () => {
   // }, []);
 
 
-const { data, isLoading, isError, error } = useGetProductsQuery(null, {refetchOnMountOrArgChange: true})
+const { data, isLoading, isError, error } = useGetProductsQuery()
 
   const products = data?.data || []
 
