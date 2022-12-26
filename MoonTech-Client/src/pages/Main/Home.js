@@ -1,27 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../../components/ProductCard";
+import { useGetProductsQuery } from "../../features/api/apiSlice";
 import { toggle, toggleBrands } from "../../features/filter/filterSlice";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
   const filter = useSelector((state) => state.filter);
   const { stock, brands } = filter;
   const dispatch = useDispatch();
 
-  console.log(products)
-  useEffect(() => {
-    fetch('http://localhost:5000/products')
-      .then(res => res.json())
-      .then(data => setProducts(data.data))
-  }, []);
+  // console.log(products)
+  // useEffect(() => {
+  //   fetch('http://localhost:5000/products')
+  //     .then(res => res.json())
+  //     .then(data => setProducts(data.data))
+  // }, []);
+
+
+const { data, isLoading, isError, error } = useGetProductsQuery(null, {refetchOnMountOrArgChange: true})
+
+  const products = data?.data || []
+
+  console.log(data)
 
   const activeClass = "text-white  bg-indigo-500 border-white";
 
 
   let content
 
+  if (isLoading) {
+    content = <div>Loading...</div>
+  }
 
+  if (isError) {
+    content = <div>{error.message}</div>
+  }
 
   if (products?.length) {
     content = products.map((product) => (
